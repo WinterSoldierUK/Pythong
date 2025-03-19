@@ -6,17 +6,29 @@ from random import choice
 pygame.init()
 clock = pygame.time.Clock()
 
+paddle_sound = pygame.mixer.Sound('paddle hit.mp3')
+glass_sound = pygame.mixer.Sound('Glass Smash.mp3')
+
 def ball_animation():
-    global ball_speed_x, ball_speed_y
+    global ball_speed_x, ball_speed_y, player_score, opponent_score
     ball.x += ball_speed_x
     ball.y += ball_speed_y
 
     if ball.top <= 0 or ball.bottom >= screen_height:
         ball_speed_y *= -1
-    if ball.left <= 0 or ball.right >= screen_width:
+    if ball.left <= 0:
+        glass_sound.play()
+        player_score += 1
+        print(player_score, opponent_score)
+        ball_reset()
+    if ball.right >= screen_width:
+        glass_sound.play()
+        opponent_score += 1
+        print(player_score, opponent_score)
         ball_reset()
 
     if ball.colliderect(player) or ball.colliderect(opponent):
+        paddle_sound.play()
         ball_speed_x *= -1
 
 def player_animation():
@@ -58,6 +70,8 @@ ball_speed_x = 7
 ball_speed_y = 7
 player_speed = 0
 opponent_speed = 7
+player_score = 0
+opponent_score = 0
 
 while True:
     for event in pygame.event.get():
@@ -78,7 +92,6 @@ while True:
     ball_animation()
     player_animation()
     opponent_animation()
-    
 
     screen.fill(bg_colour)
     pygame.draw.rect(screen, light_grey, player)
