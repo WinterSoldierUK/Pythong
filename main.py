@@ -72,6 +72,7 @@ player_speed = 0
 opponent_speed = 7
 player_score = 0
 opponent_score = 0
+game_font = pygame.font.Font('freesansbold.ttf', 48)
 
 while True:
     for event in pygame.event.get():
@@ -98,6 +99,11 @@ while True:
     pygame.draw.rect(screen, light_grey, opponent)
     pygame.draw.ellipse(screen, light_grey, ball)
     pygame.draw.aaline(screen, light_grey, (screen_width // 2, 0), (screen_width // 2, screen_height))
+
+    player_text = game_font.render(f'{player_score}', False, light_grey)
+    opponent_text = game_font.render(f'{opponent_score}', False, light_grey)
+    screen.blit(opponent_text, (600, 470))
+    screen.blit(player_text, (660, 470))
 
     pygame.display.flip()
     clock.tick(60)
